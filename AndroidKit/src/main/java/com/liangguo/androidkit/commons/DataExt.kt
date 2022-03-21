@@ -45,7 +45,7 @@ inline var <T>  MutableStateFlow<T>.smartNotifyValue: T
 /**
  * 设置值，如果与当前已有的值不一样则会进行更新，并执行[ifNotify]函数。
  */
-fun <T> MutableStateF low<T>.setValueSmartNotify(value: T, ifNotify: ((T) -> Unit)? = null) {
+fun <T> MutableStateFlow<T>.setValueSmartNotify(value: T, ifNotify: ((T) -> Unit)? = null) {
     if (this.value != value) {
         this.value = value
         ifNotify?.invoke(value)
