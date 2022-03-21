@@ -65,7 +65,7 @@ object CalendarUtil {
      */
     fun toCompleteDateString(calendar: Calendar?): String {
         calendar?.let {
-            return calendar[Calendar.YEAR].toString() + "年" + (calendar[Calendar.MONTH] + 1) + "月" + calendar[Calendar.DAY_OF_MONTH] + "日 " + calendar.getDayOfWeekString()
+            return calendar[Calendar.YEAR].toString() + "年" + (calendar[Calendar.MONTH] + 1) + "月" + calendar[Calendar.DAY_OF_MONTH] + "日 " + calendar.dayOfWeek
         } ?: let {
             return toCompleteDateString(Calendar.getInstance())
         }
@@ -226,24 +226,6 @@ fun Calendar.toShortString(): String {
 }
 
 /**
- * 获取星期几
- */
-fun Calendar.getDayOfWeekString(): String {
-    var dayOfWeek = "星期"
-    when (this[Calendar.DAY_OF_WEEK]) {
-        0 -> dayOfWeek += "天"
-        1 -> dayOfWeek += "一"
-        2 -> dayOfWeek += "二"
-        3 -> dayOfWeek += "三"
-        4 -> dayOfWeek += "四"
-        5 -> dayOfWeek += "五"
-        6 -> dayOfWeek += "六"
-    }
-    return dayOfWeek
-}
-
-
-/**
  * 当前时间：比如 14:24:47
  */
 val currentTime: String
@@ -284,20 +266,43 @@ val currentDayOfWeek: String
 /**
  * 获取星期几
  */
-private val Calendar.dayOfWeek: String
+val Calendar.dayOfWeek: String
     get() {
         var dayOfWeek = "星期"
         when (this[Calendar.DAY_OF_WEEK]) {
-            0 -> dayOfWeek += "天"
             1 -> dayOfWeek += "一"
             2 -> dayOfWeek += "二"
             3 -> dayOfWeek += "三"
             4 -> dayOfWeek += "四"
             5 -> dayOfWeek += "五"
             6 -> dayOfWeek += "六"
+            7 -> dayOfWeek += "天"
         }
         return dayOfWeek
     }
 
-private val Int.doubleDigit: String
+val Int.doubleDigit: String
     get() = if (this < 10) "0$this" else this.toString()
+
+/**
+ * 将时间转换为中文日期字符串
+ * 如 2022年1月20日
+ */
+val Calendar.cnDate: String
+    get() {
+        val sb = StringBuilder()
+        sb.append(get(Calendar.YEAR)).append('年')
+        sb.append(get(Calendar.MONTH) + 1).append('月')
+        sb.append(get(Calendar.DAY_OF_MONTH)).append('日')
+        return sb.toString()
+    }
+
+/**
+ * 获取某一天的时间
+ * 比如 13:25
+ */
+fun getTimeOfDay(timeMills: Long): String {
+    val fen = timeMills / 1000 / 60
+    val hour = (fen / 60) % 24
+    return "${hour.toInt().doubleDigit}:${(fen % 60).toInt().doubleDigit}"
+}
