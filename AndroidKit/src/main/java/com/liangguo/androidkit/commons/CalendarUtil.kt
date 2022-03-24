@@ -270,13 +270,13 @@ val Calendar.dayOfWeek: String
     get() {
         var dayOfWeek = "星期"
         when (this[Calendar.DAY_OF_WEEK]) {
-            1 -> dayOfWeek += "一"
-            2 -> dayOfWeek += "二"
-            3 -> dayOfWeek += "三"
-            4 -> dayOfWeek += "四"
-            5 -> dayOfWeek += "五"
-            6 -> dayOfWeek += "六"
-            7 -> dayOfWeek += "天"
+            1 -> dayOfWeek += "天"
+            2 -> dayOfWeek += "一"
+            3 -> dayOfWeek += "二"
+            4 -> dayOfWeek += "三"
+            5 -> dayOfWeek += "四"
+            6 -> dayOfWeek += "五"
+            7 -> dayOfWeek += "六"
         }
         return dayOfWeek
     }
