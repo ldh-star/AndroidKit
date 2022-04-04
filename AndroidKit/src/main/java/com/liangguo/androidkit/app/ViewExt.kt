@@ -9,6 +9,7 @@ import android.view.ViewPropertyAnimator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 
 /**
