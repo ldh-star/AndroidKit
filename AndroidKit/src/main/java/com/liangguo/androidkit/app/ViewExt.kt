@@ -18,6 +18,19 @@ import androidx.viewpager2.widget.ViewPager2
  */
 
 /**
+ * 为[ExtendedFloatingActionButton]设置显示或者隐藏并同时伴随缩放动画
+ * @param hide 是否隐藏
+ */
+fun ExtendedFloatingActionButton.showOrHideWithScaleAnim(hide: Boolean) {
+    if (hide) {
+        hide()
+    } else {
+        show()
+    }
+    post { startAnimation(scaleAnim(hide)) }
+}
+
+/**
  * 为View添加Y方向上的平移动画
  */
 fun View.animTranslateY(
@@ -28,6 +41,7 @@ fun View.animTranslateY(
     .translationY(targetTranslationY.toFloat())
     .setInterpolator(interpolator)
     .setDuration(duration)
+
 
 
 /**

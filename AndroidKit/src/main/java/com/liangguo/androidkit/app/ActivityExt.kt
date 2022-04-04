@@ -56,7 +56,7 @@ fun Class<out Activity>.startActivityWithClipRevealAnimation(
  * @param configIntent 在这个函数块里可以进行对Intent配置。
  */
 fun Class<out Activity>.startNewActivity(
-    context: Context,
+    context: Context = EasyingContext.currentActivity ?: EasyingContext.context,
     intent: Intent = Intent(context, this).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) },
     bundle: Bundle? = null,
     configIntent: Intent.() -> Unit = {}
@@ -75,7 +75,7 @@ fun Class<out Activity>.startNewActivity(
  * @param configIntent 在这个函数块里可以进行对Intent配置。
  */
 fun KClass<out Activity>.startNewActivity(
-    context: Context = EasyingContext.context,
+    context: Context = EasyingContext.currentActivity ?: EasyingContext.context,
     intent: Intent = Intent(context, this.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) },
     bundle: Bundle? = null,
     configIntent: Intent.() -> Unit = {}
