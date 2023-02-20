@@ -1,6 +1,5 @@
 
 # AndroidKit
-## 已废弃 迁移到 https://gitee.com/liang_dh/AndroidKit
 
 [![](https://jitpack.io/v/ldh-star/AndroidKit.svg)](https://jitpack.io/#ldh-star/AndroidKit) ![](https://img.shields.io/badge/author-ldh-orange.svg) ![](https://img.shields.io/hexpm/l/plug.svg)
 
@@ -19,12 +18,12 @@
 Add it in your root build.gradle at the end of repositories:
 
 ```gradlex
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
 	}
+}
 ```
 
 #### Step 2. Add the dependency
