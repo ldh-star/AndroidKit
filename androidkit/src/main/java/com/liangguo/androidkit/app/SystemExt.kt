@@ -33,13 +33,13 @@ val Context.wifiNetwork: Network?
 /**
  * 通过硬件获取设备唯一标识
  */
-private fun getDeviceIdByHardware(context: Context): String? {
+fun Context.getDeviceIdByHardware(): String? {
     val deviceId = StringBuilder()
     // 渠道标志
     deviceId.append("a")
     try {
         //wifi mac地址
-        val wifi = context.getSystemService(ComponentActivity.WIFI_SERVICE) as WifiManager
+        val wifi = getSystemService(ComponentActivity.WIFI_SERVICE) as WifiManager
         val info = wifi.connectionInfo
         val wifiMac = info.macAddress
         if (!wifiMac.isNullOrEmpty()) {
@@ -48,7 +48,7 @@ private fun getDeviceIdByHardware(context: Context): String? {
             return deviceId.toString()
         }
         //IMEI（imei）
-        val tm = context.getSystemService(ComponentActivity.TELEPHONY_SERVICE) as TelephonyManager
+        val tm = getSystemService(ComponentActivity.TELEPHONY_SERVICE) as TelephonyManager
         val imei = tm.deviceId
         if (!imei.isNullOrEmpty()) {
             deviceId.append("imei")
