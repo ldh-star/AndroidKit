@@ -44,7 +44,6 @@ fun View.animTranslateY(
     .setDuration(duration)
 
 
-
 /**
  * dp转px
  */
@@ -94,7 +93,6 @@ fun <V : View> V.matchParent() = this.modifySize(
     ViewGroup.LayoutParams.MATCH_PARENT,
     ViewGroup.LayoutParams.MATCH_PARENT
 )
-
 
 
 /**

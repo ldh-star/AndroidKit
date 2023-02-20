@@ -4,12 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.liangguo.easyingcontext.EasyingContext
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import kotlin.reflect.KClass
 
 
@@ -133,4 +137,75 @@ fun Activity.showSystemUI() {
     window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+}
+
+
+/**
+ * 隐藏软键盘
+ */
+fun Activity.hideSoftInputFromWindow() {
+    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE)
+    currentFocus?.let {
+        if (inputMethodManager is InputMethodManager) {
+            inputMethodManager.hideSoftInputFromWindow(
+                it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
+    }
+}
+
+/**
+ * 获取安卓屏幕的尺寸等数据，包括屏幕尺寸、像素、像素点密度
+ */
+fun Activity.getAndroidScreenProperty(): List<Pair<String, String>> {
+    val list = mutableListOf<Pair<String, String>>()
+    val dm = DisplayMetrics()
+    display?.getMetrics(dm) ?: windowManager.defaultDisplay.getMetrics(dm)
+    val width: Int = dm.widthPixels // 屏幕宽度（像素）
+    val height: Int = dm.heightPixels // 屏幕高度（像素）
+    val density: Float = dm.density // 屏幕密度（0.75 / 1.0 / 1.5）
+    val densityDpi: Int = dm.densityDpi // 屏幕密度dpi（120 / 160 / 240）
+    // 屏幕宽度算法:屏幕宽度（像素）/屏幕密度
+    val screenWidth = (width / density).toInt() // 屏幕宽度(dp)
+    val screenHeight = (height / density).toInt() // 屏幕高度(dp)
+
+    list.add("屏幕宽度（像素）" to width.toString())
+    list.add("屏幕高度（像素）" to height.toString())
+    list.add("屏幕密度（0.75 / 1.0 / 1.5）" to density.toString())
+    list.add("屏幕密度dpi（120 / 160 / 240）" to densityDpi.toString())
+    list.add("屏幕密度dpi（120 / 160 / 240）" to densityDpi.toString())
+    list.add("屏幕宽度（dp）" to screenWidth.toString())
+    list.add("屏幕高度（dp）" to screenHeight.toString())
+
+    return list
+}
+
+
+/**
+ * 模拟按下Home键跳到桌面
+ */
+fun Context.backToHome() {
+    val home = Intent(Intent.ACTION_MAIN)
+    home.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+    home.addCategory(Intent.CATEGORY_HOME)
+    home.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    startActivity(home)
+}
+
+/**
+ * 从assets的文件读取字符串
+ * 比如： readStringFromAssets("config/AppConfig.json")
+ */
+fun Context.readStringFromAssets(fileName: String): String? {
+    try {
+        val inputReader = InputStreamReader(resources.assets.open(fileName))
+        val bufReader = BufferedReader(inputReader)
+        var line: String?
+        var result = ""
+        while (bufReader.readLine().also { line = it } != null) result += line
+        return result
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return null
 }

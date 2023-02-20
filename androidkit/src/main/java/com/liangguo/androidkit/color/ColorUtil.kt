@@ -15,6 +15,9 @@ import kotlin.math.roundToInt
  */
 object ColorUtil {
 
+    /**
+     * 颜色淡化
+     */
     fun desaturateColor(color: Int, ratio: Float): Int {
         val hsv = FloatArray(3)
         Color.colorToHSV(color, hsv)
@@ -24,10 +27,14 @@ object ColorUtil {
         return Color.HSVToColor(hsv)
     }
 
+
     fun stripAlpha(@ColorInt color: Int): Int {
         return -0x1000000 or color
     }
 
+    /**
+     * 改变颜色亮度
+     */
     @ColorInt
     fun shiftColor(@ColorInt color: Int, @FloatRange(from = 0.0, to = 2.0) by: Float): Int {
         if (by == 1f) return color
@@ -53,12 +60,18 @@ object ColorUtil {
         return shiftColor(color, 1.1f)
     }
 
+    /**
+     * 判断颜色是属于亮色还是暗色
+     */
     fun isColorLight(@ColorInt color: Int): Boolean {
         val darkness =
             1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
         return darkness < 0.4
     }
 
+    /**
+     * 反转颜色
+     */
     @ColorInt
     fun invertColor(@ColorInt color: Int): Int {
         val r = 255 - Color.red(color)
@@ -84,12 +97,3 @@ object ColorUtil {
     }
 
 }
-
-@ColorInt
-fun Int.desaturateColor(ratio: Float) = ColorUtil.desaturateColor(this, ratio)
-
-
-
-@ColorInt
-fun Int.withAlpha(@FloatRange(from = 0.0, to = 1.0) alpha: Float) = ColorUtil.withAlpha(this, alpha)
-

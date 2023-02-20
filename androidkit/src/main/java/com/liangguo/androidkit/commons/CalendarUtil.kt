@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import com.liangguo.androidkit.commons.CalendarUtil.toNearDayString
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 /**
@@ -13,6 +15,11 @@ import java.util.*
  */
 object CalendarUtil {
 
+    /**
+     * 获取当前的时间
+     */
+    val now: Calendar
+        get() = Calendar.getInstance()
 
     /**
      * 获取附近两天时间的字符串，如果不是最近两天，则返回null
@@ -20,39 +27,33 @@ object CalendarUtil {
     fun Calendar.toNearDayString(): String? {
         val today = Calendar.getInstance()
         when {
-            today.isSameDay(getNearDate(this, 0)) -> {
+            today.isSameDay(getNearDate(0)) -> {
                 return "今天"
             }
-            today.isSameDay(getNearDate(this, 1)) -> {
+
+            today.isSameDay(getNearDate(1)) -> {
                 return "昨天"
             }
-            today.isSameDay(getNearDate(this, 2)) -> {
+
+            today.isSameDay(getNearDate(2)) -> {
                 return "前天"
             }
-            today.isSameDay(getNearDate(this, -1)) -> {
+
+            today.isSameDay(getNearDate(-1)) -> {
                 return "明天"
             }
-            today.isSameDay(getNearDate(this, -2)) -> {
+
+            today.isSameDay(getNearDate(-2)) -> {
                 return "后天"
             }
+
             else -> return null
         }
     }
 
     /**
-     * 获取相邻的日期
-     *
-     * @param calendar       传入的日历
-     * @param differenceDays 相差的天数
-     */
-    fun getNearDate(calendar: Calendar, differenceDays: Int): Calendar {
-        val c = calendar.clone() as Calendar
-        c.add(Calendar.DAY_OF_YEAR, differenceDays)
-        return c
-    }
-
-    /**
      * calendar转UTC字符串
+     * 如 2017-07-28T08:28:47.776Z
      */
     @SuppressLint("SimpleDateFormat")
     fun toUTC(calendar: Calendar): String {
@@ -206,6 +207,11 @@ fun Int.toDoubleDigits() = if (this < 10) "0$this" else this.toString()
 fun Calendar.toHHMM(): String =
     "${get(Calendar.HOUR_OF_DAY).toDoubleDigits()}:${get(Calendar.MINUTE).toDoubleDigits()}"
 
+/**
+ * 转换成如 14:24:22的格式
+ */
+fun Calendar.toHHMMSS(): String =
+    "${get(Calendar.HOUR_OF_DAY).toDoubleDigits()}:${get(Calendar.MINUTE).toDoubleDigits()}:${get(Calendar.SECOND).toDoubleDigits()}"
 
 
 /**
@@ -305,4 +311,20 @@ fun getTimeOfDay(timeMills: Long): String {
     val fen = timeMills / 1000 / 60
     val hour = (fen / 60) % 24
     return "${hour.toInt().doubleDigit}:${(fen % 60).toInt().doubleDigit}"
+}
+
+
+/**
+ * 将[Date]类型转换成[Calendar]类型
+ */
+fun Date.toCalendar(): Calendar {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = time
+    return calendar
+}
+
+fun Calendar.toLocalDateTime() = LocalDateTime.ofInstant(toInstant(), ZoneId.systemDefault())
+
+fun LocalDateTime.toCalendar() = Calendar.getInstance().also {
+    it.set(year, (monthValue - 1), dayOfMonth, minute, second)
 }

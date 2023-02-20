@@ -6,6 +6,6 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "MyUtils"
+rootProject.name = "AndroidKit"
 include ':app'
-include ':AndroidKit'
+include ':androidkit'
